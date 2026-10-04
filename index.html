@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blox Fruits Store - Contas, itens, Game Passes e serviços.">
+  <title>Blox Fruits Store</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:#05060c; --bg2:#080a14; --surface:rgba(17,19,34,.72);
+      --border:rgba(255,255,255,.09); --blue:#4c7dff; --blue-light:#65d9ff;
+      --purple:#9a5cff; --gold:#ffd166; --text:#f6f7ff; --muted:#9298ad;
+      --radius:22px; --gradient:linear-gradient(135deg,#4c7dff,#9a5cff 55%,#65d9ff);
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{min-height:100vh;overflow-x:hidden;color:var(--text);background:radial-gradient(circle at 15% 10%,rgba(76,125,255,.13),transparent 30%),radial-gradient(circle at 85% 30%,rgba(154,92,255,.12),transparent 30%),var(--bg);font-family:Inter,sans-serif}
+    body.modal-open{overflow:hidden}
+    button,input,textarea{font:inherit}button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer}a{color:inherit;text-decoration:none}
+    #particles{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:-5}
+    .ambient{position:fixed;width:500px;height:500px;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:-4;opacity:.12;animation:ambientFloat 10s ease-in-out infinite alternate}
+    .ambient-1{background:#4c7dff;top:5%;left:-15%}.ambient-2{background:#9a5cff;right:-15%;bottom:10%;animation-delay:-5s}
+    @keyframes ambientFloat{from{transform:translate(0,0)}to{transform:translate(60px,-40px)}}
+    .header{position:fixed;top:0;left:0;width:100%;height:78px;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(5,6,12,.68);backdrop-filter:blur(18px);border-bottom:1px solid transparent;transition:.35s ease}
+    .header.scrolled{height:68px;background:rgba(5,6,12,.9);border-bottom-color:var(--border)}
+    .logo{display:flex;align-items:center;gap:9px;font-family:Orbitron,sans-serif;font-weight:900}
+    .logo>span:last-child>span{color:var(--blue-light)}.logo-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--gradient);box-shadow:0 0 30px rgba(76,125,255,.35)}
+    .nav{display:flex;align-items:center;gap:25px}.nav a{position:relative;color:#b9bdd0;font-size:13px;font-weight:600;transition:.3s}.nav a:hover{color:white}.nav a::after{content:"";position:absolute;left:0;bottom:-8px;width:0;height:2px;background:var(--blue-light);transition:.3s}.nav a:hover::after{width:100%}
+    .header-actions{display:flex;align-items:center;gap:10px}.cart-button,.menu-button{border:1px solid var(--border);background:rgba(255,255,255,.04);color:white}
+    .cart-button{position:relative;width:43px;height:43px;display:grid;place-items:center;border-radius:13px}.cart-count{position:absolute;top:-5px;right:-5px;min-width:19px;height:19px;padding:0 5px;display:grid;place-items:center;border-radius:50%;background:#ff4d7d;font-size:10px;font-weight:800}
+    .menu-button{display:none;width:43px;height:43px;padding:10px;border-radius:13px}.menu-button span{display:block;height:2px;margin:5px 0;background:white;transition:.3s}
+    .section{position:relative;width:min(1220px,90%);margin:auto;padding:130px 0}.dark-section{width:100%;max-width:none;padding-left:max(5%,calc((100% - 1220px)/2));padding-right:max(5%,calc((100% - 1220px)/2));background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,.025),rgba(255,255,255,.01))}
+    .section-heading{max-width:700px;margin:0 auto 65px;text-align:center}.eyebrow{display:inline-block;margin-bottom:13px;color:var(--blue-light);font-family:Orbitron,sans-serif;font-size:10px;font-weight:800;letter-spacing:2px}.section-heading h2{margin-bottom:15px;font-family:Orbitron,sans-serif;font-size:clamp(28px,4vw,48px);line-height:1.1}.section-heading h2 span{background:var(--gradient);-webkit-background-clip:text;color:transparent}.section-heading p{color:var(--muted);line-height:1.8}
+    .hero{min-height:100vh;width:100%;max-width:none;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:60px;padding:130px max(5%,calc((100% - 1220px)/2)) 80px;overflow:hidden}.hero-content{position:relative;z-index:2}
+    .badge{display:inline-flex;align-items:center;gap:9px;padding:9px 13px;margin-bottom:25px;border:1px solid rgba(101,217,255,.2);border-radius:50px;background:rgba(101,217,255,.05);color:#b9eaff;font-size:10px;font-weight:800;letter-spacing:1.5px}.pulse{width:7px;height:7px;border-radius:50%;background:#56ffad;box-shadow:0 0 12px #56ffad;animation:pulse 1.5s infinite}@keyframes pulse{50%{transform:scale(1.6);opacity:.5}}
+    .hero h1{max-width:750px;font-family:Orbitron,sans-serif;font-size:clamp(48px,7vw,94px);font-weight:900;line-height:.9;letter-spacing:-5px}.hero h1 span{display:block;background:linear-gradient(90deg,#fff,#65d9ff 30%,#9a5cff 65%,#fff);-webkit-background-clip:text;color:transparent;background-size:200%;animation:gradientMove 5s linear infinite}@keyframes gradientMove{to{background-position:200%}}
+    .hero p{max-width:570px;margin:30px 0;color:var(--muted);font-size:18px;line-height:1.7}.hero p strong{color:white}.hero-buttons{display:flex;flex-wrap:wrap;gap:12px}
+    .btn{min-height:48px;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:0 21px;border:1px solid transparent;border-radius:13px;font-size:13px;font-weight:800;transition:.3s}.btn:hover{transform:translateY(-3px)}.btn-primary{background:var(--gradient);color:white;box-shadow:0 10px 35px rgba(76,125,255,.25)}.btn-primary:hover{box-shadow:0 15px 50px rgba(76,125,255,.42)}.btn-secondary{background:rgba(255,255,255,.05);border-color:var(--border)}.btn-ghost{color:#adb3c9}
+    .hero-stats{display:flex;gap:45px;margin-top:55px}.hero-stats div{display:flex;flex-direction:column;gap:4px}.hero-stats strong{font-family:Orbitron;font-size:21px}.hero-stats span{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:1px}
+    .hero-visual{min-height:580px;position:relative;display:grid;place-items:center}.orb{width:min(420px,80vw);aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle at 35% 25%,rgba(255,255,255,.25),transparent 18%),radial-gradient(circle,rgba(76,125,255,.32),rgba(154,92,255,.12) 45%,transparent 70%);border:1px solid rgba(101,217,255,.2);box-shadow:0 0 70px rgba(76,125,255,.22),inset 0 0 80px rgba(154,92,255,.16);animation:orbFloat 6s ease-in-out infinite}.orb::before,.orb::after{content:"";position:absolute;width:105%;height:105%;border-radius:50%;border:1px solid rgba(101,217,255,.13);animation:spin 14s linear infinite}.orb::after{width:120%;height:120%;border-color:rgba(154,92,255,.12);animation-direction:reverse;animation-duration:20s}@keyframes spin{to{transform:rotate(360deg)}}@keyframes orbFloat{50%{transform:translateY(-20px)}}
+    .orb-inner{width:62%;aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.12),transparent 55%),#090c19;box-shadow:inset 0 0 50px rgba(76,125,255,.2),0 0 50px rgba(76,125,255,.2)}.orb-inner span{font-size:100px;filter:drop-shadow(0 0 30px rgba(101,217,255,.6))}
+    .floating-card{position:absolute;display:flex;align-items:center;gap:12px;padding:13px;border:1px solid var(--border);border-radius:15px;background:rgba(13,15,27,.7);backdrop-filter:blur(15px);box-shadow:0 25px 80px rgba(0,0,0,.45);animation:floatCard 5s ease-in-out infinite}.floating-card span{width:40px;height:40px;display:grid;place-items:center;border-radius:11px;background:rgba(255,255,255,.06)}.floating-card strong,.floating-card small{display:block}.floating-card strong{font-size:12px}.floating-card small{margin-top:3px;color:#56ffad;font-size:9px}.floating-card-1{top:20%;left:2%}.floating-card-2{right:0;bottom:23%;animation-delay:-2s}@keyframes floatCard{50%{transform:translateY(-12px)}}
+    .scroll-indicator{position:absolute;bottom:25px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;color:#777d93;font-size:10px;text-transform:uppercase;letter-spacing:1px}.scroll-indicator span{width:22px;height:35px;border:1px solid var(--border);border-radius:20px;position:relative}.scroll-indicator span::after{content:"";position:absolute;top:7px;left:50%;width:3px;height:6px;border-radius:10px;background:var(--blue-light);transform:translateX(-50%);animation:scrollDot 1.5s infinite}@keyframes scrollDot{to{transform:translate(-50%,10px);opacity:0}}
+    .category-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:17px}.category-card{position:relative;min-height:220px;padding:27px;overflow:hidden;border:1px solid var(--border);border-radius:var(--radius);background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.015));transition:.4s}.category-card:hover{transform:translateY(-9px);border-color:rgba(101,217,255,.25);box-shadow:0 25px 80px rgba(0,0,0,.45)}.category-icon{width:54px;height:54px;display:grid;place-items:center;margin-bottom:28px;border-radius:15px;background:rgba(255,255,255,.06);font-size:25px}.category-card h3{font-family:Orbitron;font-size:18px}.category-card p{margin:10px 0 20px;color:var(--muted);font-size:12px;line-height:1.6}.category-card>span{color:var(--blue-light);font-size:11px;font-weight:800}
+    .accounts-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:22px}.account-card,.product-card,.service-card,.review-form-card,.review-card{border:1px solid var(--border);background:var(--surface);backdrop-filter:blur(15px)}.account-card{position:relative;overflow:hidden;border-radius:var(--radius)}.featured-card{border-color:rgba(101,217,255,.18);box-shadow:0 20px 80px rgba(76,125,255,.08)}.featured-label{position:absolute;top:20px;right:20px;z-index:2;padding:7px 10px;border-radius:7px;background:var(--gradient);font-size:8px;font-weight:900;letter-spacing:1px}.account-image{min-height:250px;display:grid;place-items:center;align-content:center;background:radial-gradient(circle,rgba(76,125,255,.3),transparent 55%),linear-gradient(135deg,#080b18,#11142a);border-bottom:1px solid var(--border)}.account-image.alternate{background:radial-gradient(circle,rgba(154,92,255,.28),transparent 55%),linear-gradient(135deg,#0a0818,#171126)}.account-glow{font-family:Orbitron;font-size:clamp(50px,7vw,85px);font-weight:900;background:var(--gradient);-webkit-background-clip:text;color:transparent;filter:drop-shadow(0 0 30px rgba(76,125,255,.35))}.account-image>span{color:var(--muted);font-size:10px;letter-spacing:4px;font-weight:800}.account-body{padding:28px}.account-title{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}.product-tag{color:var(--blue-light);font-size:8px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}.account-body h3,.product-content h3,.service-card h3{margin-top:7px;font-family:Orbitron;font-size:18px}.status{color:#55efac;font-size:9px;font-weight:700}.status i{display:inline-block;width:6px;height:6px;margin-right:5px;border-radius:50%;background:#55efac;box-shadow:0 0 10px #55efac}.account-highlights{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:25px 0}.account-highlights div{padding:14px 8px;text-align:center;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.025)}.account-highlights strong,.account-highlights small{display:block}.account-highlights strong{font-family:Orbitron;font-size:15px}.account-highlights small{margin-top:5px;color:var(--muted);font-size:8px}.feature-list{display:grid;gap:10px;margin:20px 0;list-style:none;color:#aeb4c8;font-size:11px}.product-footer{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:25px}.price small{display:block;color:var(--muted);font-size:8px}.price strong{display:block;margin-top:3px;font-family:Orbitron;font-size:17px}
+    .products-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.product-card{overflow:hidden;border-radius:var(--radius);transition:.4s}.product-card:hover{transform:translateY(-8px);border-color:rgba(101,217,255,.25);box-shadow:0 25px 80px rgba(0,0,0,.45)}.product-image{height:210px;display:grid;place-items:center;border-bottom:1px solid var(--border);background:radial-gradient(circle,rgba(76,125,255,.16),transparent 60%),#0a0d18;position:relative;overflow:hidden}.product-image span{font-size:70px;filter:drop-shadow(0 0 30px rgba(101,217,255,.25));transition:.4s}.product-card:hover .product-image span{transform:scale(1.12) rotate(-4deg)}.product-image.fruit{background:radial-gradient(circle,rgba(154,92,255,.2),transparent 60%),#0a0d18}.product-image.sword{background:radial-gradient(circle,rgba(255,209,102,.12),transparent 60%),#0a0d18}.product-content{padding:22px}.product-content h3{font-size:16px}.product-description,.product-content p{min-height:40px;margin-top:10px;color:var(--muted);font-size:11px;line-height:1.6}.product-price{font-family:Orbitron;font-size:15px}.icon-buy{width:38px;height:38px;border:1px solid rgba(101,217,255,.2);border-radius:11px;background:rgba(76,125,255,.1);color:var(--blue-light);font-size:21px;transition:.3s}.icon-buy:hover{background:var(--gradient);color:white;transform:rotate(90deg)}
+    .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.service-card{position:relative;overflow:hidden;padding:30px;border-radius:var(--radius);transition:.4s}.service-card:hover{transform:translateY(-8px);border-color:rgba(154,92,255,.25)}.service-icon{width:60px;height:60px;display:grid;place-items:center;margin-bottom:30px;border:1px solid var(--border);border-radius:17px;background:rgba(255,255,255,.05);font-size:27px}.service-card h3{margin:10px 0}.service-card>p{min-height:60px;color:var(--muted);font-size:12px;line-height:1.7}.service-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:30px}.service-bottom strong{font-family:Orbitron}
+    .reviews-layout{display:grid;grid-template-columns:370px 1fr;gap:25px}.review-form-card{height:fit-content;padding:28px;border-radius:var(--radius)}.review-form-card h3{font-family:Orbitron;font-size:17px}.review-form-card>p{margin:8px 0 25px;color:var(--muted);font-size:11px}.review-form-card label{display:block;margin:17px 0 8px;color:#c7cad7;font-size:10px;font-weight:700}.review-form-card input,.review-form-card textarea{width:100%;border:1px solid var(--border);outline:none;border-radius:11px;background:rgba(255,255,255,.035);color:white;padding:13px;transition:.3s}.review-form-card input:focus,.review-form-card textarea:focus{border-color:rgba(101,217,255,.4)}.review-form-card textarea{min-height:110px;resize:vertical}.star-selector{display:flex;gap:5px}.star-selector button{border:0;background:none;color:#4d5161;font-size:25px;transition:.2s}.star-selector button.active,.star-selector button:hover{color:var(--gold);transform:scale(1.1)}.full-width{width:100%}.reviews-list{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.review-card{padding:22px;border-radius:18px}.review-top{display:flex;align-items:center;gap:11px}.avatar{width:40px;height:40px;display:grid;place-items:center;border-radius:50%;background:var(--gradient);font-weight:900}.review-top strong,.review-top span{display:block}.review-top strong{font-size:12px}.review-top span{margin-top:3px;color:var(--muted);font-size:8px}.stars{margin-left:auto;color:var(--gold);font-size:11px}.review-card>p{margin-top:18px;color:#afb4c5;font-size:11px;line-height:1.7}
+    .contact-section{width:min(1220px,90%);margin:0 auto;padding:40px 0 100px}.contact-box{display:flex;align-items:center;justify-content:space-between;gap:30px;padding:50px;border:1px solid rgba(101,217,255,.14);border-radius:30px;background:radial-gradient(circle at 80% 20%,rgba(154,92,255,.18),transparent 30%),radial-gradient(circle at 20% 80%,rgba(76,125,255,.16),transparent 30%),rgba(255,255,255,.025)}.contact-box h2{margin-bottom:10px;font-family:Orbitron;font-size:clamp(25px,4vw,40px)}.contact-box p{max-width:600px;color:var(--muted);font-size:13px;line-height:1.7}
+    .footer{border-top:1px solid var(--border);background:#030408}.footer-main{width:min(1220px,90%);margin:auto;padding:70px 0;display:grid;grid-template-columns:2fr 1fr 1fr;gap:50px}.footer-brand p{max-width:320px;margin-top:18px;color:var(--muted);font-size:11px;line-height:1.8}.footer-column{display:flex;flex-direction:column;gap:12px}.footer-column h4{margin-bottom:8px;font-family:Orbitron;font-size:12px}.footer-column a{color:var(--muted);font-size:11px;transition:.25s}.footer-column a:hover{color:var(--blue-light)}.footer-bottom{width:min(1220px,90%);margin:auto;display:flex;justify-content:space-between;gap:20px;padding:20px 0;border-top:1px solid var(--border);color:#5f6475;font-size:9px}
+    .modal-overlay,.cart-overlay{position:fixed;inset:0;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.75);backdrop-filter:blur(12px);opacity:0;visibility:hidden;transition:.35s;z-index:3000}.modal-overlay.active,.cart-overlay.active{opacity:1;visibility:visible}.modal{width:min(510px,100%);max-height:90vh;overflow:auto;position:relative;padding:32px;border:1px solid var(--border);border-radius:25px;background:radial-gradient(circle at top right,rgba(154,92,255,.12),transparent 35%),#0c0f1c;box-shadow:0 40px 120px rgba(0,0,0,.65);transform:translateY(20px) scale(.97);transition:.35s}.modal-overlay.active .modal{transform:translateY(0) scale(1)}.modal-close{position:absolute;top:17px;right:17px;width:35px;height:35px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,.04);color:white;font-size:20px}.modal-icon{width:55px;height:55px;display:grid;place-items:center;margin-bottom:20px;border-radius:15px;background:var(--gradient);font-size:23px}.modal h2{margin-bottom:25px;font-family:Orbitron}.selected-product{display:grid;grid-template-columns:1fr auto;gap:15px;padding:18px;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.03)}.selected-product span,.selected-product strong{display:block}.selected-product span{margin-bottom:6px;color:var(--muted);font-size:9px}.selected-product strong{font-size:12px}.quantity-control{display:flex;justify-content:space-between;align-items:center;margin:22px 0;color:var(--muted);font-size:11px}.quantity-buttons{display:flex;align-items:center;gap:14px}.quantity-buttons button{width:32px;height:32px;border:1px solid var(--border);border-radius:9px;background:rgba(255,255,255,.04);color:white}.modal-total{display:flex;align-items:center;justify-content:space-between;padding:20px 0;margin-bottom:18px;border-top:1px solid var(--border);font-size:13px}.modal-total strong{font-family:Orbitron;font-size:20px}.modal-note{display:block;margin-top:15px;color:#686d7f;text-align:center;font-size:9px}
+    .cart-overlay{display:block;padding:0}.cart-panel{position:absolute;top:0;right:0;width:min(450px,100%);height:100%;display:flex;flex-direction:column;background:#080a13;border-left:1px solid var(--border);transform:translateX(100%);transition:.4s}.cart-overlay.active .cart-panel{transform:translateX(0)}.cart-header{display:flex;justify-content:space-between;align-items:flex-start;padding:28px;border-bottom:1px solid var(--border)}.cart-header h2{font-family:Orbitron}.cart-items{flex:1;overflow:auto;padding:22px}.empty-cart{height:100%;display:grid;place-items:center;align-content:center;text-align:center}.empty-cart span{font-size:50px;opacity:.4}.empty-cart h3{margin-top:15px;font-family:Orbitron;font-size:14px}.empty-cart p{margin-top:7px;color:var(--muted);font-size:10px}.cart-item{display:grid;grid-template-columns:1fr auto;gap:15px;padding:16px 0;border-bottom:1px solid var(--border)}.cart-item h4{font-size:12px}.cart-item small{display:block;margin-top:5px;color:var(--muted)}.cart-item-controls{display:flex;align-items:center;gap:8px;margin-top:12px}.cart-item-controls button{width:25px;height:25px;border:1px solid var(--border);border-radius:7px;background:rgba(255,255,255,.04);color:white}.remove-item{color:#ff668c!important}.cart-footer{padding:25px;border-top:1px solid var(--border)}.cart-total{display:flex;justify-content:space-between;margin-bottom:18px}.cart-total strong{font-family:Orbitron}
+    .terms-modal{width:min(700px,100%)}.terms-content{max-height:400px;overflow:auto;padding-right:8px}.terms-content h3{margin:22px 0 7px;font-family:Orbitron;font-size:13px}.terms-content p{color:var(--muted);font-size:11px;line-height:1.8}
+    .toast{position:fixed;right:25px;bottom:25px;z-index:5000;display:flex;align-items:center;gap:10px;padding:14px 17px;border:1px solid rgba(86,255,173,.2);border-radius:13px;background:rgba(10,15,18,.9);backdrop-filter:blur(15px);box-shadow:0 25px 80px rgba(0,0,0,.45);transform:translateY(100px);opacity:0;transition:.4s}.toast.show{transform:translateY(0);opacity:1}.toast span{color:#56ffad}.toast p{font-size:10px}
+    .reveal{opacity:0;transform:translateY(35px);transition:opacity .8s ease,transform .8s ease}.reveal.visible{opacity:1;transform:translateY(0)}
+    @media(max-width:1000px){.nav{gap:15px}.nav a{font-size:11px}.hero{grid-template-columns:1fr;text-align:center}.hero-content{display:flex;flex-direction:column;align-items:center}.hero-visual{min-height:450px}.category-grid{grid-template-columns:repeat(2,1fr)}.accounts-grid{grid-template-columns:1fr}.products-grid{grid-template-columns:repeat(2,1fr)}.services-grid{grid-template-columns:1fr}.reviews-layout{grid-template-columns:1fr}.footer-main{grid-template-columns:1fr 1fr}.footer-brand{grid-column:1/-1}}
+    @media(max-width:760px){.menu-button{display:block}.nav{position:fixed;top:78px;left:5%;right:5%;display:flex;flex-direction:column;align-items:stretch;gap:0;padding:12px;border:1px solid var(--border);border-radius:18px;background:rgba(8,10,19,.96);backdrop-filter:blur(20px);opacity:0;visibility:hidden;transform:translateY(-10px);transition:.3s}.nav.active{opacity:1;visibility:visible;transform:translateY(0)}.nav a{padding:14px}.nav a::after{display:none}.hero{padding-top:125px}.hero-buttons{justify-content:center}.hero-stats{gap:18px;justify-content:center}.hero-visual{min-height:380px}.orb{width:290px}.orb-inner span{font-size:65px}.floating-card{transform:scale(.8)}.floating-card-1{left:-15px}.floating-card-2{right:-15px}.products-grid,.category-grid,.reviews-list{grid-template-columns:1fr}.account-title{flex-direction:column}.contact-box{flex-direction:column;align-items:flex-start;padding:30px}.footer-main{grid-template-columns:1fr}.footer-brand{grid-column:auto}.footer-bottom{flex-direction:column}}
+    @media(max-width:480px){.section{padding:90px 0}.hero{min-height:auto;padding-bottom:100px}.hero h1{font-size:47px}.hero p{font-size:14px}.hero-buttons .btn{width:100%}.hero-stats{width:100%;justify-content:space-between}.hero-stats strong{font-size:16px}.hero-stats span{font-size:8px}.hero-visual{min-height:320px}.orb{width:240px}.floating-card{display:none}.account-body{padding:20px}.modal{padding:25px 20px}.cart-panel{width:100%}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+
+<body>
+  <canvas id="particles"></canvas>
+  <div class="ambient ambient-1"></div>
+  <div class="ambient ambient-2"></div>
+
+  <header class="header" id="header">
+    <a href="#inicio" class="logo"><span class="logo-icon">⚡</span><span>BLOX<span>STORE</span></span></a>
+    <nav class="nav" id="nav">
+      <a href="#inicio">Início</a><a href="#contas">Contas</a><a href="#acessorios">Acessórios</a>
+      <a href="#frutas">Frutas</a><a href="#espadas">Espadas</a><a href="#servicos">Serviços</a><a href="#avaliacoes">Avaliações</a>
+    </nav>
+    <div class="header-actions">
+      <button class="cart-button" id="cartButton" aria-label="Abrir carrinho">🛒<span class="cart-count" id="cartCount">0</span></button>
+      <button class="menu-button" id="menuButton" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero section" id="inicio">
+      <div class="hero-content reveal">
+        <div class="badge"><span class="pulse"></span>LOJA PREMIUM BLOX FRUITS</div>
+        <h1>BLOX<span>FRUITS</span>STORE</h1>
+        <p>Contas, itens, Game Passes e serviços para <strong>elevar sua aventura</strong>.</p>
+        <div class="hero-buttons">
+          <a href="#contas" class="btn btn-primary">Comprar agora <span>→</span></a>
+          <a href="#produtos" class="btn btn-secondary">Ver produtos</a>
+          <a href="#contato" class="btn btn-ghost">Falar conosco</a>
+        </div>
+        <div class="hero-stats">
+          <div><strong>30M+</strong><span>Bounty disponível</span></div>
+          <div><strong>7x</strong><span>Raças V4</span></div>
+          <div><strong>100%</strong><span>Experiência premium</span></div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="orb"><div class="orb-inner"><span>⚔</span></div></div>
+        <div class="floating-card floating-card-1"><span>🍎</span><div><strong>Kitsune</strong><small>Disponível</small></div></div>
+        <div class="floating-card floating-card-2"><span>⚔️</span><div><strong>Dark Blade</strong><small>Premium</small></div></div>
+      </div>
+      <div class="scroll-indicator"><span></span>Role para explorar</div>
+    </section>
+
+    <section class="section categories" id="produtos">
+      <div class="section-heading reveal"><span class="eyebrow">EXPLORE A LOJA</span><h2>Escolha seu <span>próximo upgrade</span></h2><p>Produtos selecionados para sua jornada em Blox Fruits.</p></div>
+      <div class="category-grid">
+        <a href="#contas" class="category-card reveal"><div class="category-icon">👤</div><h3>Contas</h3><p>Contas completas e prontas para jogar.</p><span>Explorar →</span></a>
+        <a href="#frutas" class="category-card reveal"><div class="category-icon">🍎</div><h3>Frutas</h3><p>Frutas poderosas para sua aventura.</p><span>Explorar →</span></a>
+        <a href="#espadas" class="category-card reveal"><div class="category-icon">⚔️</div><h3>Espadas</h3><p>Armas e itens lendários.</p><span>Explorar →</span></a>
+        <a href="#servicos" class="category-card reveal"><div class="category-icon">🚀</div><h3>Serviços</h3><p>Game Passes e serviços especiais.</p><span>Explorar →</span></a>
+      </div>
+    </section>
+
+    <section class="section dark-section" id="contas">
+      <div class="section-heading reveal"><span class="eyebrow">CONTAS PREMIUM</span><h2>Contas <span>30M + V4</span></h2><p>Contas preparadas com recursos de alto nível.</p></div>
+      <div class="accounts-grid">
+        <article class="account-card featured-card reveal">
+          <div class="featured-label">DESTAQUE</div>
+          <div class="account-image"><div class="account-glow">30M</div><span>BOUNTY</span></div>
+          <div class="account-body">
+            <div class="account-title"><div><span class="product-tag">CONTA PREMIUM</span><h3>30M Bounty • V4</h3></div><span class="status"><i></i> Disponível</span></div>
+            <div class="account-highlights"><div><strong>30M</strong><small>Bounty</small></div><div><strong>7/7</strong><small>Raças V4</small></div><div><strong>MAX</strong><small>Progressão</small></div></div>
+            <ul class="feature-list"><li>✓ 7 Raças V4</li><li>✓ Frutas disponíveis</li><li>✓ Espadas premium</li><li>✓ Acessórios exclusivos</li></ul>
+            <div class="product-footer"><div class="price"><small>A partir de</small><strong>R$ 199,90</strong></div><button class="btn btn-primary buy-btn" data-name="Conta 30M Bounty + 7 Raças V4" data-price="199.90">Comprar</button></div>
+          </div>
+        </article>
+
+        <article class="account-card reveal">
+          <div class="account-image alternate"><div class="account-glow">V4</div><span>ULTIMATE</span></div>
+          <div class="account-body"><span class="product-tag">ULTIMATE</span><h3>Conta V4 Ultimate</h3><p class="product-description">Conta preparada para jogadores que procuram uma experiência avançada.</p>
+            <ul class="feature-list"><li>✓ Raças V4</li><li>✓ Frutas variadas</li><li>✓ Espadas especiais</li><li>✓ Acessórios</li></ul>
+            <div class="product-footer"><div class="price"><small>Preço</small><strong>R$ 149,90</strong></div><button class="btn btn-secondary buy-btn" data-name="Conta V4 Ultimate" data-price="149.90">Comprar</button></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="acessorios">
+      <div class="section-heading reveal"><span class="eyebrow">ACESSÓRIOS</span><h2>Personalize seu <span>personagem</span></h2><p>Itens para deixar sua coleção ainda mais completa.</p></div>
+      <div class="products-grid">
+        <article class="product-card reveal"><div class="product-image"><span>🎩</span></div><div class="product-content"><span class="product-tag">ACESSÓRIO</span><h3>Capacete de Piloto</h3><p>Acessório estiloso para sua coleção.</p><div class="product-footer"><strong class="product-price">R$ 19,90</strong><button class="icon-buy buy-btn" data-name="Capacete de Piloto" data-price="19.90">+</button></div></div></article>
+        <article class="product-card reveal"><div class="product-image"><span>🧥</span></div><div class="product-content"><span class="product-tag">RARO</span><h3>Capa do Barba Negra</h3><p>Visual inspirado em um dos personagens mais marcantes.</p><div class="product-footer"><strong class="product-price">R$ 24,90</strong><button class="icon-buy buy-btn" data-name="Capa do Barba Negra" data-price="24.90">+</button></div></div></article>
+        <article class="product-card reveal"><div class="product-image"><span>👑</span></div><div class="product-content"><span class="product-tag">ESPECIAL</span><h3>Outros Acessórios</h3><p>Itens adicionais para complementar sua conta.</p><div class="product-footer"><strong class="product-price">R$ 14,90</strong><button class="icon-buy buy-btn" data-name="Acessório Especial" data-price="14.90">+</button></div></div></article>
+      </div>
+    </section>
+
+    <section class="section dark-section" id="frutas">
+      <div class="section-heading reveal"><span class="eyebrow">FRUTAS</span><h2>Escolha seu <span>poder</span></h2><p>Uma coleção de frutas para sua aventura.</p></div>
+      <div class="products-grid">
+        <article class="product-card reveal"><div class="product-image fruit"><span>🐯</span></div><div class="product-content"><span class="product-tag">LEGENDARY</span><h3>Tiger</h3><p>Uma fruta poderosa e extremamente desejada.</p><div class="product-footer"><strong class="product-price">R$ 89,90</strong><button class="icon-buy buy-btn" data-name="Tiger" data-price="89.90">+</button></div></div></article>
+        <article class="product-card reveal"><div class="product-image fruit"><span>🦊</span></div><div class="product-content"><span class="product-tag">MYTHICAL</span><h3>Kitsune</h3><p>Uma das frutas mais cobiçadas da coleção.</p><div class="product-footer"><strong class="product-price">R$ 99,90</strong><button class="icon-buy buy-btn" data-name="Kitsune" data-price="99.90">+</button></div></div></article>
+        <article class="product-card reveal"><div class="product-image fruit"><span>💨</span></div><div class="product-content"><span class="product-tag">RARE</span><h3>Gás</h3><p>Uma fruta com efeitos visuais impressionantes.</p><div class="product-footer"><strong class="product-price">R$ 69,90</strong><button class="icon-buy buy-btn" data-name="Gás" data-price="69.90">+</button></div></div></article>
+        <article class="product-card reveal"><div class="product-image fruit"><span>☠️</span></div><div class="product-content"><span class="product-tag">MYTHICAL</span><h3>Venom</h3><p>Poder venenoso para jogadores que gostam de dano.</p><div class="product-footer"><strong class="product-price">R$ 59,90</strong><button class="icon-buy buy-btn" data-name="Venom" data-price="59.90">+</button></div></div></article>
+        <article class="product-card reveal"><div class="product-image fruit"><span>🍩</span></div><div class="product-content"><span class="product-tag">MYTHICAL</span><h3>Dough</h3><p>Fruta clássica para builds avançadas.</p><div class="product-footer"><strong class="product-price">R$ 64,90</strong><button class="icon-buy buy-btn" data-name="Dough" data-price="64.90">+</button></div></div></article>
+        <article class="product-card reveal"><div class="product-image fruit"><span>🌀</span></div><div class="product-content"><span class="product-tag">POPULAR</span><h3>Portal</h3><p>Mobilidade e utilidade em uma única fruta.</p><div class="product-footer"><strong class="product-price">R$ 44,90</strong><button class="icon-buy buy-btn" data-name="Portal" data-price="44.90">+</button></div></div></article>
+        <article class="product-card reveal"><div class="product-image fruit"><span>🖐️</span></div><div class="product-content"><span class="product-tag">RARE</span><h3>Pain</h3><p>Uma opção diferenciada para sua coleção.</p><div class="product-footer"><strong class="product-price">R$ 39,90</strong><button class="icon-buy buy-btn" data-name="Pain" data-price="39.90">+</button></div></div></article>
+      </div>
+    </section>
+
+    <section class="section" id="espadas">
+      <div class="section-heading reveal"><span class="eyebrow">ARSENAL</span><h2>Espadas <span>lendárias</span></h2><p>Armas especiais para completar seu arsenal.</p></div>
+      <div class="products-grid">
+        <article class="product-card reveal"><div class="product-image sword"><span>⚔️</span></div><div class="product-content"><span class="product-tag">LEGENDARY</span><h3>TTK</h3><p>True Triple Katana.</p><div class="product-footer"><strong class="product-price">R$ 79,90</strong><button class="icon-buy buy-btn" data-name="TTK" data-price="79.90">+</button></div></div></article>
+        <article class="product-card reveal"><div class="product-image sword"><span>🗡️</span></div><div class="product-content"><span class="product-tag">MYTHICAL</span><h3>CDK</h3><p>Cursed Dual Katana.</p><div class="product-footer"><strong class="product-price">R$ 89,90</strong><button class="icon-buy buy-btn" data-name="CDK" data-price="89.90">+</button></div></div></article>
+        <article class="product-card reveal"><div class="product-image sword"><span>⚔</span></div><div class="product-content"><span class="product-tag">RARE</span><h3>Soul Cane</h3><p>Uma espada clássica para colecionadores.</p><div class="product-footer"><strong class="product-price">R$ 49,90</strong><button class="icon-buy buy-btn" data-name="Soul Cane" data-price="49.90">+</button></div></div></article>
+        <article class="product-card reveal"><div class="product-image sword"><span>🦊</span></div><div class="product-content"><span class="product-tag">SPECIAL</span><h3>Fox Lamp</h3><p>Arma especial de aparência marcante.</p><div class="product-footer"><strong class="product-price">R$ 54,90</strong><button class="icon-buy buy-btn" data-name="Fox Lamp" data-price="54.90">+</button></div></div></article>
+        <article class="product-card reveal"><div class="product-image sword"><span>🐉</span></div><div class="product-content"><span class="product-tag">NEW</span><h3>Dragonheart</h3><p>Uma espada temática de alto impacto visual.</p><div class="product-footer"><strong class="product-price">R$ 69,90</strong><button class="icon-buy buy-btn" data-name="Dragonheart" data-price="69.90">+</button></div></div></article>
+        <article class="product-card reveal"><div class="product-image sword"><span>🌑</span></div><div class="product-content"><span class="product-tag">PREMIUM</span><h3>Dark Blade</h3><p>Uma das armas mais icônicas.</p><div class="product-footer"><strong class="product-price">R$ 50,00</strong><button class="icon-buy buy-btn" data-name="Dark Blade" data-price="50.00">+</button></div></div></article>
+      </div>
+    </section>
+
+    <section class="section dark-section" id="servicos">
+      <div class="section-heading reveal"><span class="eyebrow">GAME PASSES & SERVIÇOS</span><h2>Mais recursos para <span>sua aventura</span></h2><p>Escolha os serviços que combinam com seu estilo de jogo.</p></div>
+      <div class="services-grid">
+        <article class="service-card reveal"><div class="service-icon">🚤</div><span class="product-tag">GAME PASS</span><h3>Barcos Rápidos</h3><p>Tenha acesso a uma experiência de navegação mais rápida.</p><div class="service-bottom"><strong>R$ 40,00</strong><button class="btn btn-primary buy-btn" data-name="Barcos Rápidos" data-price="40.00">Comprar</button></div></article>
+        <article class="service-card reveal"><div class="service-icon">🔎</div><span class="product-tag">GAME PASS</span><h3>Localizador de Frutas</h3><p>Recurso para facilitar sua busca por frutas.</p><div class="service-bottom"><strong>R$ 50,00</strong><button class="btn btn-primary buy-btn" data-name="Localizador de Frutas" data-price="50.00">Comprar</button></div></article>
+        <article class="service-card reveal"><div class="service-icon">🌑</div><span class="product-tag">PREMIUM</span><h3>Dark Blade</h3><p>Adicione uma das armas mais conhecidas à sua experiência.</p><div class="service-bottom"><strong>R$ 50,00</strong><button class="btn btn-primary buy-btn" data-name="Dark Blade - Serviço" data-price="50.00">Comprar</button></div></article>
+      </div>
+    </section>
+
+    <section class="section" id="avaliacoes">
+      <div class="section-heading reveal"><span class="eyebrow">FEEDBACK</span><h2>Avaliações dos <span>Clientes</span></h2><p>Veja o que os clientes dizem sobre a experiência.</p></div>
+      <div class="reviews-layout">
+        <div class="review-form-card reveal">
+          <h3>Deixe sua avaliação</h3><p>Sua opinião ajuda a melhorar a experiência.</p>
+          <form id="reviewForm">
+            <label for="reviewName">Nome</label><input type="text" id="reviewName" placeholder="Seu nome" maxlength="40" required>
+            <label>Nota</label><div class="star-selector" id="starSelector"><button type="button" data-rating="1">★</button><button type="button" data-rating="2">★</button><button type="button" data-rating="3">★</button><button type="button" data-rating="4">★</button><button type="button" data-rating="5">★</button></div>
+            <label for="reviewComment">Comentário</label><textarea id="reviewComment" placeholder="Conte como foi sua experiência..." maxlength="300" required></textarea>
+            <button class="btn btn-primary full-width" type="submit">Publicar avaliação</button>
+          </form>
+        </div>
+        <div class="reviews-list" id="reviewsList">
+          <article class="review-card reveal"><div class="review-top"><div class="avatar">G</div><div><strong>Gabriel</strong><span>Cliente verificado</span></div><div class="stars">★★★★★</div></div><p>"Site muito bonito e fácil de navegar. A experiência ficou muito profissional."</p></article>
+          <article class="review-card reveal"><div class="review-top"><div class="avatar">L</div><div><strong>Lucas</strong><span>Cliente verificado</span></div><div class="stars">★★★★★</div></div><p>"Gostei bastante da organização dos produtos e do visual futurista."</p></article>
+          <article class="review-card reveal"><div class="review-top"><div class="avatar">M</div><div><strong>Matheus</strong><span>Cliente verificado</span></div><div class="stars">★★★★☆</div></div><p>"A loja ficou muito bonita e os cards deixam tudo fácil de encontrar."</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-section" id="contato">
+      <div class="contact-box reveal"><div><span class="eyebrow">PRECISA DE AJUDA?</span><h2>Fale com nossa equipe.</h2><p>Entre em contato para tirar dúvidas sobre produtos, serviços e pedidos.</p></div><a href="#" class="btn btn-primary">Falar conosco →</a></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-main">
+      <div class="footer-brand"><a href="#inicio" class="logo"><span class="logo-icon">⚡</span><span>BLOX<span>STORE</span></span></a><p>Uma experiência moderna para sua jornada em Blox Fruits.</p></div>
+      <div class="footer-column"><h4>Loja</h4><a href="#contas">Contas</a><a href="#acessorios">Acessórios</a><a href="#frutas">Frutas</a><a href="#espadas">Espadas</a></div>
+      <div class="footer-column"><h4>Informações</h4><a href="#servicos">Serviços</a><a href="#avaliacoes">Avaliações</a><a href="#" id="termsLink">Termos e Condições</a><a href="#">Privacidade</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 BloxStore. Todos os direitos reservados.</span><span>Feito para uma experiência premium.</span></div>
+  </footer>
+
+  <div class="modal-overlay" id="purchaseModal">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">×</button>
+      <div class="modal-icon">🛒</div><span class="eyebrow">CONFIRMAR PEDIDO</span><h2>Seu pedido</h2>
+      <div class="selected-product"><div><span>Produto</span><strong id="modalProductName">Produto</strong></div><div><span>Preço unitário</span><strong id="modalProductPrice">R$ 0,00</strong></div></div>
+      <div class="quantity-control"><span>Quantidade</span><div class="quantity-buttons"><button id="quantityMinus">−</button><strong id="quantityValue">1</strong><button id="quantityPlus">+</button></div></div>
+      <div class="modal-total"><span>Total</span><strong id="modalTotal">R$ 0,00</strong></div>
+      <button class="btn btn-primary full-width" id="continuePurchase">Continuar</button>
+      <small class="modal-note">Esta demonstração não processa pagamentos reais.</small>
+    </div>
+  </div>
+
+  <div class="cart-overlay" id="cartOverlay">
+    <aside class="cart-panel">
+      <div class="cart-header"><div><span class="eyebrow">SEU PEDIDO</span><h2>Carrinho</h2></div><button id="cartClose" class="modal-close">×</button></div>
+      <div class="cart-items" id="cartItems"><div class="empty-cart"><span>🛒</span><h3>Seu carrinho está vazio</h3><p>Adicione produtos para começar.</p></div></div>
+      <div class="cart-footer"><div class="cart-total"><span>Total</span><strong id="cartTotal">R$ 0,00</strong></div><button class="btn btn-primary full-width" id="checkoutButton">Finalizar pedido</button></div>
+    </aside>
+  </div>
+
+  <div class="modal-overlay" id="termsModal">
+    <div class="modal terms-modal">
+      <button class="modal-close" id="termsClose">×</button><span class="eyebrow">INFORMAÇÕES</span><h2>Termos e Condições</h2>
+      <div class="terms-content">
+        <h3>1. Informações gerais</h3><p>Os produtos e serviços apresentados neste site são destinados exclusivamente à demonstração e comercialização conforme as condições informadas pela loja.</p>
+        <h3>2. Regras da plataforma</h3><p>O cliente é responsável por conhecer e respeitar as regras, políticas e termos aplicáveis à plataforma e ao jogo.</p>
+        <h3>3. Pagamentos</h3><p>O sistema apresentado neste projeto é apenas uma interface demonstrativa. Nenhum pagamento real é processado por este código.</p>
+        <h3>4. Produtos digitais</h3><p>Produtos digitais podem estar sujeitos a condições específicas informadas antes da conclusão de uma compra.</p>
+        <h3>5. Alterações</h3><p>A loja poderá atualizar produtos, preços, disponibilidade e condições de atendimento.</p>
+      </div>
+      <button class="btn btn-primary full-width" id="termsAccept">Entendi</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"><span>✓</span><p>Produto adicionado ao carrinho.</p></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded",()=>{
+
+      const $=id=>document.getElementById(id);
+      const header=$("header"),menuButton=$("menuButton"),nav=$("nav");
+      const purchaseModal=$("purchaseModal"),modalClose=$("modalClose");
+      const modalProductName=$("modalProductName"),modalProductPrice=$("modalProductPrice"),modalTotal=$("modalTotal"),quantityValue=$("quantityValue"),quantityMinus=$("quantityMinus"),quantityPlus=$("quantityPlus"),continuePurchase=$("continuePurchase");
+      const cartButton=$("cartButton"),cartOverlay=$("cartOverlay"),cartClose=$("cartClose"),cartItems=$("cartItems"),cartCount=$("cartCount"),cartTotal=$("cartTotal"),checkoutButton=$("checkoutButton"),toast=$("toast");
+      const termsLink=$("termsLink"),termsModal=$("termsModal"),termsClose=$("termsClose"),termsAccept=$("termsAccept");
+      const reviewForm=$("reviewForm"),reviewsList=$("reviewsList"),starSelector=$("starSelector");
+
+      let selectedProduct=null,quantity=1,selectedRating=5;
+      let cart=JSON.parse(localStorage.getItem("bloxstore-cart")||"[]");
+
+      const formatPrice=v=>new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(v);
+      const showToast=message=>{toast.querySelector("p").textContent=message;toast.classList.add("show");clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>toast.classList.remove("show"),2500)};
+      const saveCart=()=>localStorage.setItem("bloxstore-cart",JSON.stringify(cart));
+      const escapeHTML=v=>String(v).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+
+      window.addEventListener("scroll",()=>header.classList.toggle("scrolled",scrollY>40));
+      menuButton.addEventListener("click",()=>nav.classList.toggle("active"));
+      document.querySelectorAll(".nav a").forEach(a=>a.addEventListener("click",()=>nav.classList.remove("active")));
+
+      const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");observer.unobserve(e.target)}}),{threshold:.12});
+      document.querySelectorAll(".reveal").forEach(e=>observer.observe(e));
+
+      function openPurchaseModal(name,price){
+        selectedProduct={name,price:Number(price)};quantity=1;
+        modalProductName.textContent=name;modalProductPrice.textContent=formatPrice(selectedProduct.price);quantityValue.textContent=1;updateModalTotal();
+        purchaseModal.classList.add("active");document.body.classList.add("modal-open");
+      }
+      function closePurchaseModal(){purchaseModal.classList.remove("active");document.body.classList.remove("modal-open")}
+      function updateModalTotal(){if(selectedProduct)modalTotal.textContent=formatPrice(selectedProduct.price*quantity)}
+      document.querySelectorAll(".buy-btn").forEach(b=>b.addEventListener("click",()=>openPurchaseModal(b.dataset.name,b.dataset.price)));
+      modalClose.addEventListener("click",closePurchaseModal);
+      purchaseModal.addEventListener("click",e=>{if(e.target===purchaseModal)closePurchaseModal()});
+      quantityMinus.addEventListener("click",()=>{if(quantity>1){quantity--;quantityValue.textContent=quantity;updateModalTotal()}});
+      quantityPlus.addEventListener("click",()=>{if(quantity<99){quantity++;quantityValue.textContent=quantity;updateModalTotal()}});
+      continuePurchase.addEventListener("click",()=>{if(!selectedProduct)return;addToCart(selectedProduct.name,selectedProduct.price,quantity);closePurchaseModal();showToast("Produto adicionado ao carrinho.")});
+
+      function addToCart(name,price,amount=1){
+        const existing=cart.find(i=>i.name===name);
+        if(existing)existing.quantity+=amount;else cart.push({name,price:Number(price),quantity:amount});
+        saveCart();renderCart();
+      }
+      function removeFromCart(index){cart.splice(index,1);saveCart();renderCart()}
+      function changeCartQuantity(index,change){cart[index].quantity+=change;if(cart[index].quantity<=0){removeFromCart(index);return}saveCart();renderCart()}
+      function renderCart(){
+        const items=cart.reduce((s,i)=>s+i.quantity,0),total=cart.reduce((s,i)=>s+i.price*i.quantity,0);
+        cartCount.textContent=items;cartTotal.textContent=formatPrice(total);
+        if(!cart.length){cartItems.innerHTML='<div class="empty-cart"><span>🛒</span><h3>Seu carrinho está vazio</h3><p>Adicione produtos para começar.</p></div>';return}
+        cartItems.innerHTML=cart.map((i,index)=>`<div class="cart-item"><div><h4>${escapeHTML(i.name)}</h4><small>${formatPrice(i.price)}</small><div class="cart-item-controls"><button data-action="minus" data-index="${index}">−</button><strong>${i.quantity}</strong><button data-action="plus" data-index="${index}">+</button><button class="remove-item" data-action="remove" data-index="${index}">Remover</button></div></div><strong>${formatPrice(i.price*i.quantity)}</strong></div>`).join("");
+      }
+      cartItems.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;const i=Number(b.dataset.index);if(b.dataset.action==="plus")changeCartQuantity(i,1);if(b.dataset.action==="minus")changeCartQuantity(i,-1);if(b.dataset.action==="remove")removeFromCart(i)});
+      cartButton.addEventListener("click",()=>{cartOverlay.classList.add("active");document.body.classList.add("modal-open")});
+      cartClose.addEventListener("click",()=>{cartOverlay.classList.remove("active");document.body.classList.remove("modal-open")});
+      cartOverlay.addEventListener("click",e=>{if(e.target===cartOverlay){cartOverlay.classList.remove("active");document.body.classList.remove("modal-open")}});
+      checkoutButton.addEventListener("click",()=>{if(!cart.length)return showToast("Seu carrinho está vazio.");showToast("Pedido preparado. Integre seu gateway de pagamento aqui.")});
+      renderCart();
+
+      termsLink.addEventListener("click",e=>{e.preventDefault();termsModal.classList.add("active");document.body.classList.add("modal-open")});
+      const closeTerms=()=>{termsModal.classList.remove("active");document.body.classList.remove("modal-open")};
+      termsClose.addEventListener("click",closeTerms);termsAccept.addEventListener("click",closeTerms);termsModal.addEventListener("click",e=>{if(e.target===termsModal)closeTerms()});
+
+      function updateStars(rating){selectedRating=rating;starSelector.querySelectorAll("button").forEach(b=>b.classList.toggle("active",Number(b.dataset.rating)<=rating))}
+      starSelector.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>updateStars(Number(b.dataset.rating))));
+      updateStars(5);
+
+      reviewForm.addEventListener("submit",e=>{
+        e.preventDefault();
+        const name=$("reviewName").value.trim(),comment=$("reviewComment").value.trim();if(!name||!comment)return;
+        const review=document.createElement("article");review.className="review-card reveal visible";
+        review.innerHTML=`<div class="review-top"><div class="avatar">${escapeHTML(name.charAt(0).toUpperCase())}</div><div><strong>${escapeHTML(name)}</strong><span>Avaliação enviada agora</span></div><div class="stars">${"★".repeat(selectedRating)}${"☆".repeat(5-selectedRating)}</div></div><p>"${escapeHTML(comment)}"</p>`;
+        reviewsList.prepend(review);reviewForm.reset();updateStars(5);showToast("Avaliação publicada!");
+      });
+
+      const canvas=$("particles"),ctx=canvas.getContext("2d");let particles=[];
+      function resizeCanvas(){canvas.width=innerWidth*devicePixelRatio;canvas.height=innerHeight*devicePixelRatio;canvas.style.width=innerWidth+"px";canvas.style.height=innerHeight+"px";ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}
+      function createParticles(){const n=innerWidth<600?35:70;particles=Array.from({length:n},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,size:Math.random()*1.7+.3,speed:Math.random()*.35+.1,opacity:Math.random()*.5+.1}))}
+      function animateParticles(){ctx.clearRect(0,0,innerWidth,innerHeight);particles.forEach(p=>{p.y-=p.speed;if(p.y<-10){p.y=innerHeight+10;p.x=Math.random()*innerWidth}ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fillStyle=`rgba(101,217,255,${p.opacity})`;ctx.fill()});requestAnimationFrame(animateParticles)}
+      resizeCanvas();createParticles();animateParticles();addEventListener("resize",()=>{resizeCanvas();createParticles()});
+
+      document.addEventListener("keydown",e=>{if(e.key==="Escape"){closePurchaseModal();closeTerms();cartOverlay.classList.remove("active");document.body.classList.remove("modal-open")}});
+
+    });
+  </script>
+</body>
+</html>
